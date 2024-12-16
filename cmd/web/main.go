@@ -7,12 +7,15 @@ import (
 	"net/http"
 	"os"
 
+	pSQL "github.com/speeddem0n/todobox/pkg/models/postgreSQL"
+
 	_ "github.com/lib/pq"
 )
 
 type application struct { //Зависимости для наших обработчиков
 	errorLog *log.Logger
 	infoLog  *log.Logger
+	todos    *pSQL.TodoModel
 }
 
 func main() {
@@ -34,6 +37,7 @@ func main() {
 	app := &application{
 		errorLog: errorLog,
 		infoLog:  infoLog,
+		todos:    &pSQL.TodoModel{DB: db},
 	}
 
 	srv := &http.Server{
