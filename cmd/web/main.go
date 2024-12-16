@@ -18,7 +18,7 @@ type application struct { //Зависимости для наших обраб�
 func main() {
 
 	addr := flag.String("addr", ":4000", "Network addres HTTP")
-	dsn := flag.String("dsn", "user=web password=1Q2b3c4a dbname=todobox sslmode=disable", "Название postgreSQL источника данных")
+	dsn := flag.String("dsn", "user=web password=1235 dbname=todobox sslmode=disable", "Название postgreSQL источника данных")
 
 	flag.Parse() // Получаем флаг из командной строки
 
