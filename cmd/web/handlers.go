@@ -46,18 +46,18 @@ func (app *application) showSnippet(wr http.ResponseWriter, resp *http.Request) 
 func (app *application) createSnippet(wr http.ResponseWriter, resp *http.Request) {
 	if resp.Method != http.MethodPost {
 		wr.Header().Set("Allow", http.MethodPost)
-		app.clientError(wr, http.StatusMethodNotAllowed) // Испольхуем помошник clientError
+		app.clientError(wr, http.StatusMethodNotAllowed) // Испольхуем помошник clientError для обработки ошибки
 		return
 	}
-	title := "Test, todo"
+	title := "Test, todo" // Тестовые данные для ввода в заметку
 	content := "I need to work more AAAAAAAAAAAA"
 	expires := "7"
 
-	id, err := app.todos.Insert(title, content, expires)
+	id, err := app.todos.Insert(title, content, expires) // Добавляем данные в БД
 	if err != nil {
 		app.serverError(wr, err)
 		return
 	}
 
-	http.Redirect(wr, resp, fmt.Sprintf("/snippet?id=%d", id), http.StatusSeeOther)
+	http.Redirect(wr, resp, fmt.Sprintf("/snippet?id=%d", id), http.StatusSeeOther) // Перенаправляем пользователя на созданную заметку
 }

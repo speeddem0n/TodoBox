@@ -10,12 +10,12 @@ type TodoModel struct {
 	DB *sql.DB
 }
 
-func (m *TodoModel) Insert(title, content, expires string) (int, error) {
+func (m *TodoModel) Insert(title, content, expires string) (int, error) { // Метод добавления новой записи в БД
 	stmt := `INSERT INTO todo (title, content, created, expires)
 	VALUES($1,$2, date_trunc('second', current_timestamp), 
-	date_trunc('second', current_timestamp) + INTERVAL '1 day' * $3) RETURNING id`
+	date_trunc('second', current_timestamp) + INTERVAL '1 day' * $3) RETURNING id` // SQL запрос для добавления новой заметки, возвращает Id последнего запроса
 
-	var id int
+	var id int // Переменная для последующей записи id
 	err := m.DB.QueryRow(stmt, title, content, expires).Scan(&id)
 	if err != nil {
 		return 0, err
