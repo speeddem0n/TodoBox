@@ -15,7 +15,7 @@ import (
 type application struct { //Зависимости для наших обработчиков
 	errorLog *log.Logger
 	infoLog  *log.Logger
-	todos    *pSQL.TodoModel
+	todos    *pSQL.TodoModel // postgreSQL model
 }
 
 func main() {
