@@ -1,10 +1,13 @@
 package main
 
 import (
+	"errors"
 	"fmt"
 	"html/template"
 	"net/http"
 	"strconv"
+
+	"github.com/speeddem0n/todobox/pkg/models"
 )
 
 func (app *application) home(wr http.ResponseWriter, resp *http.Request) {
@@ -38,9 +41,20 @@ func (app *application) showSnippet(wr http.ResponseWriter, resp *http.Request) 
 	id, err := strconv.Atoi(resp.URL.Query().Get("id")) //Извлекаем значение параметра id из URL
 
 	if err != nil || id < 1 {
-		app.notFound(wr) // хелпер notFound для возвращения клиенту ошибки 404.
+		app.notFound(wr) // страница не найдена 404.
+		return
 	}
-	fmt.Fprintf(wr, "Отображение выбранной заметки с ID %d...", id) // Вставкв значения из id в строку ответа
+	s, err := app.todos.Get(id) // Метод Get() из модели todos
+	if err != nil {
+		if errors.Is(err, models.ErrNoRecord) { // Если подходящей записи не найдено - ошибка 404
+			app.notFound(wr)
+		} else {
+			app.serverError(wr, err)
+		}
+		return
+	}
+
+	fmt.Fprintf(wr, "%v", s) // Отоброжение вывода на странице
 }
 
 func (app *application) createSnippet(wr http.ResponseWriter, resp *http.Request) {
