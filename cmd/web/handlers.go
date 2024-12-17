@@ -1,10 +1,14 @@
 package main
 
 import (
+	"errors"
 	"fmt"
-	"html/template"
+
+	//"html/template"
 	"net/http"
 	"strconv"
+
+	"github.com/speeddem0n/todobox/pkg/models"
 )
 
 func (app *application) home(wr http.ResponseWriter, resp *http.Request) {
@@ -14,7 +18,17 @@ func (app *application) home(wr http.ResponseWriter, resp *http.Request) {
 		return
 	}
 
-	files := []string{
+	todoSlice, err := app.todos.Latest()
+	if err != nil {
+		app.serverError(wr, err)
+		return
+	}
+
+	for _, todo := range todoSlice {
+		fmt.Fprintf(wr, "%v\n", todo)
+	}
+
+	/*files := []string{
 		".\\ui\\html\\home.page.tmpl",
 		".\\ui\\html\\base.layout.tmpl",
 		".\\ui\\html\\footer.partial.tmpl",
@@ -29,7 +43,7 @@ func (app *application) home(wr http.ResponseWriter, resp *http.Request) {
 	err = ts.Execute(wr, nil)
 	if err != nil {
 		app.serverError(wr, err) // Использование helper serverError
-	}
+	}*/
 
 }
 
@@ -38,18 +52,37 @@ func (app *application) showSnippet(wr http.ResponseWriter, resp *http.Request) 
 	id, err := strconv.Atoi(resp.URL.Query().Get("id")) //Извлекаем значение параметра id из URL
 
 	if err != nil || id < 1 {
-		app.notFound(wr) // хелпер notFound для возвращения клиенту ошибки 404.
+		app.notFound(wr) // страница не найдена 404.
+		return
 	}
-	fmt.Fprintf(wr, "Отображение выбранной заметки с ID %d...", id) // Вставкв значения из id в строку ответа
-}
-
-func (app *application) createSnippet(wr http.ResponseWriter, resp *http.Request) {
-
-	if resp.Method != http.MethodPost {
-		wr.Header().Set("Allow", http.MethodPost)
-		app.clientError(wr, http.StatusMethodNotAllowed) // Испольхуем помошник clientError
+	s, err := app.todos.Get(id) // Метод Get() из pSQL модели todos
+	if err != nil {
+		if errors.Is(err, models.ErrNoRecord) { // Если подходящей записи не найдено - ошибка 404
+			app.notFound(wr)
+		} else {
+			app.serverError(wr, err)
+		}
 		return
 	}
 
-	wr.Write([]byte("Тут вы сможете создать новую заметку..."))
+	fmt.Fprintf(wr, "%v", s) // Отоброжение вывода на странице
+}
+
+func (app *application) createSnippet(wr http.ResponseWriter, resp *http.Request) {
+	if resp.Method != http.MethodPost {
+		wr.Header().Set("Allow", http.MethodPost)
+		app.clientError(wr, http.StatusMethodNotAllowed) // Испольхуем помошник clientError для обработки ошибки
+		return
+	}
+	title := "Test, todo" // Тестовые данные для ввода в заметку
+	content := "I need to work more AAAAAAAAAAAA"
+	expires := "7"
+
+	id, err := app.todos.Insert(title, content, expires) // Добавляем данные в БД
+	if err != nil {
+		app.serverError(wr, err)
+		return
+	}
+
+	http.Redirect(wr, resp, fmt.Sprintf("/snippet?id=%d", id), http.StatusSeeOther) // Перенаправляем пользователя на созданную заметку
 }
