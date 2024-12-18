@@ -35,8 +35,8 @@ func (app *application) routes() *http.ServeMux {
 	mux := http.NewServeMux()
 
 	mux.HandleFunc("/", app.home)
-	mux.HandleFunc("/snippet", app.showSnippet)
-	mux.HandleFunc("/snippet/create", app.createSnippet)
+	mux.HandleFunc("/todo", app.showSnippet)
+	mux.HandleFunc("/todo/create", app.createSnippet)
 
 	fileServer := http.FileServer(neuteredFileSystem{http.Dir(".\\ui\\static")})
 
