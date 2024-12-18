@@ -76,3 +76,13 @@ func (m *TodoModel) Latest() ([]*models.Todo, error) { // Метод возвр�
 
 	return todos, nil // Возвращаем срез с данными
 }
+
+func (m *TodoModel) Delete(id int) error {
+	stmt := `DELETE FROM todo where id = $1`
+
+	_, err := m.DB.Exec(stmt, id)
+	if err != nil {
+		return err
+	}
+	return nil
+}
