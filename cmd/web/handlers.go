@@ -3,8 +3,7 @@ package main
 import (
 	"errors"
 	"fmt"
-
-	//"html/template"
+	"html/template"
 	"net/http"
 	"strconv"
 
@@ -55,7 +54,8 @@ func (app *application) showSnippet(wr http.ResponseWriter, resp *http.Request) 
 		app.notFound(wr) // страница не найдена 404.
 		return
 	}
-	s, err := app.todos.Get(id) // Метод Get() из pSQL модели todos
+
+	todo, err := app.todos.Get(id) // Метод Get() из pSQL модели todos
 	if err != nil {
 		if errors.Is(err, models.ErrNoRecord) { // Если подходящей записи не найдено - ошибка 404
 			app.notFound(wr)
@@ -65,7 +65,22 @@ func (app *application) showSnippet(wr http.ResponseWriter, resp *http.Request) 
 		return
 	}
 
-	fmt.Fprintf(wr, "%v", s) // Отоброжение вывода на странице
+	files := []string{
+		".\\ui\\html\\show.page.tmpl",
+		".\\ui\\html\\base.layout.tmpl",
+		".\\ui\\html\\footer.partial.tmpl",
+	}
+
+	ts, err := template.ParseFiles(files...) // Парсинг файлов шаблонов
+	if err != nil {
+		app.serverError(wr, err) // Использование helper serverError
+		return
+	}
+
+	err = ts.Execute(wr, todo) // Выполнение файлов шаблонов
+	if err != nil {
+		app.serverError(wr, err) // Использование helper serverError
+	}
 }
 
 func (app *application) createSnippet(wr http.ResponseWriter, resp *http.Request) {
