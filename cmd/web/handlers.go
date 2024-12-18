@@ -27,7 +27,7 @@ func (app *application) home(wr http.ResponseWriter, resp *http.Request) {
 	})
 }
 
-func (app *application) showSnippet(wr http.ResponseWriter, resp *http.Request) {
+func (app *application) showTodo(wr http.ResponseWriter, resp *http.Request) {
 
 	id, err := strconv.Atoi(resp.URL.Query().Get("id")) //Извлекаем значение параметра id из URL
 
@@ -50,7 +50,7 @@ func (app *application) showSnippet(wr http.ResponseWriter, resp *http.Request) 
 	})
 }
 
-func (app *application) createSnippet(wr http.ResponseWriter, resp *http.Request) {
+func (app *application) createTodo(wr http.ResponseWriter, resp *http.Request) {
 	if resp.Method != http.MethodPost {
 		wr.Header().Set("Allow", http.MethodPost)
 		app.clientError(wr, http.StatusMethodNotAllowed) // Испольхуем помошник clientError для обработки ошибки
@@ -67,4 +67,8 @@ func (app *application) createSnippet(wr http.ResponseWriter, resp *http.Request
 	}
 
 	http.Redirect(wr, resp, fmt.Sprintf("/snippet?id=%d", id), http.StatusSeeOther) // Перенаправляем пользователя на созданную заметку
+}
+
+func (app *application) newTodo(wr http.ResponseWriter, resp *http.Request) {
+	app.render(wr, "create.page.tmpl", nil)
 }
