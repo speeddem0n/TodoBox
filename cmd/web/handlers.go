@@ -3,7 +3,6 @@ package main
 import (
 	"errors"
 	"fmt"
-	"html/template"
 	"net/http"
 	"strconv"
 
@@ -23,25 +22,9 @@ func (app *application) home(wr http.ResponseWriter, resp *http.Request) {
 		return
 	}
 
-	data := &templateData{Todos: todoSlice}
-
-	files := []string{
-		".\\ui\\html\\home.page.tmpl",
-		".\\ui\\html\\base.layout.tmpl",
-		".\\ui\\html\\footer.partial.tmpl",
-	}
-
-	ts, err := template.ParseFiles(files...) // Парсинг файлов шаблонов
-	if err != nil {
-		app.serverError(wr, err) // Использование helper serverError
-		return
-	}
-
-	err = ts.Execute(wr, data) // Выполнение файлов шаблонов
-	if err != nil {
-		app.serverError(wr, err) // Использование helper serverError
-	}
-
+	app.render(wr, "home.page.tmpl", &templateData{ // Используем помощника render() для отображения шаблона.
+		Todos: todoSlice,
+	})
 }
 
 func (app *application) showSnippet(wr http.ResponseWriter, resp *http.Request) {
@@ -62,25 +45,9 @@ func (app *application) showSnippet(wr http.ResponseWriter, resp *http.Request) 
 		}
 		return
 	}
-
-	data := &templateData{Todo: todo} // Создаем экземпляр структуры templateData, содержащей данные заметки.
-
-	files := []string{
-		".\\ui\\html\\show.page.tmpl",
-		".\\ui\\html\\base.layout.tmpl",
-		".\\ui\\html\\footer.partial.tmpl",
-	}
-
-	ts, err := template.ParseFiles(files...) // Парсинг файлов шаблонов
-	if err != nil {
-		app.serverError(wr, err) // Использование helper serverError
-		return
-	}
-
-	err = ts.Execute(wr, data) // Выполнение файлов шаблонов
-	if err != nil {
-		app.serverError(wr, err) // Использование helper serverError
-	}
+	app.render(wr, "show.page.tmpl", &templateData{
+		Todo: todo,
+	})
 }
 
 func (app *application) createSnippet(wr http.ResponseWriter, resp *http.Request) {

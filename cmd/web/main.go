@@ -3,6 +3,7 @@ package main
 import (
 	"database/sql"
 	"flag"
+	"html/template"
 	"log"
 	"net/http"
 	"os"
@@ -13,9 +14,10 @@ import (
 )
 
 type application struct { //Зависимости для наших обработчиков
-	errorLog *log.Logger
-	infoLog  *log.Logger
-	todos    *pSQL.TodoModel // postgreSQL model
+	errorLog      *log.Logger
+	infoLog       *log.Logger
+	todos         *pSQL.TodoModel // postgreSQL model
+	templateCache map[string]*template.Template
 }
 
 func main() {
@@ -34,10 +36,16 @@ func main() {
 	}
 	defer db.Close()
 
+	templateCache, err := newTemplateCache(".\\ui\\html\\") // Инициализируем новый кэш шаблона
+	if err != nil {
+		errorLog.Fatal(err)
+	}
+
 	app := &application{
-		errorLog: errorLog,
-		infoLog:  infoLog,
-		todos:    &pSQL.TodoModel{DB: db},
+		errorLog:      errorLog,
+		infoLog:       infoLog,
+		todos:         &pSQL.TodoModel{DB: db},
+		templateCache: templateCache,
 	}
 
 	srv := &http.Server{
