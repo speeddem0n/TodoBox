@@ -3,15 +3,17 @@
 {{define "title"}}Todo №{{.Todo.ID}}{{end}}
 
 {{define "main"}}
-<div class='snippet'>
-    <div class='metadata'>
-        <strong>{{.Todo.Title}}</strong>
-        <span>№{{.Todo.ID}}</span>
+    {{with .Todo}}
+    <div class='snippet'>
+        <div class='metadata'>
+            <strong>{{.Title}}</strong>
+            <span>№{{.ID}}</span>
+        </div>
+        <pre><code>{{.Content}}</code></pre>
+        <div class='metadata'>
+            <time>Создан: {{.Created}}</time>
+            <time>Срок: {{.Expires}}</time>
+        </div>
     </div>
-    <pre><code>{{.Todo.Content}}</code></pre>
-    <div class='metadata'>
-        <time>Создан: {{.Todo.Created}}</time>
-        <time>Срок: {{.Todo.Expires}}</time>
-    </div>
-</div>
+    {{end}}
 {{end}}

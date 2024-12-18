@@ -5,5 +5,6 @@ import (
 )
 
 type templateData struct { // Хранилище для любых динамических данных, которые нужно передать HTML-шаблонам.
-	Todo *models.Todo
+	Todo  *models.Todo
+	Todos []*models.Todo
 }

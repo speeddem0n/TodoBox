@@ -23,26 +23,24 @@ func (app *application) home(wr http.ResponseWriter, resp *http.Request) {
 		return
 	}
 
-	for _, todo := range todoSlice {
-		fmt.Fprintf(wr, "%v\n", todo)
-	}
+	data := &templateData{Todos: todoSlice}
 
-	/*files := []string{
+	files := []string{
 		".\\ui\\html\\home.page.tmpl",
 		".\\ui\\html\\base.layout.tmpl",
 		".\\ui\\html\\footer.partial.tmpl",
 	}
 
-	ts, err := template.ParseFiles(files...)
+	ts, err := template.ParseFiles(files...) // Парсинг файлов шаблонов
 	if err != nil {
 		app.serverError(wr, err) // Использование helper serverError
 		return
 	}
 
-	err = ts.Execute(wr, nil)
+	err = ts.Execute(wr, data) // Выполнение файлов шаблонов
 	if err != nil {
 		app.serverError(wr, err) // Использование helper serverError
-	}*/
+	}
 
 }
 
