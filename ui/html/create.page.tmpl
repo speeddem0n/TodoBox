@@ -2,8 +2,16 @@
  
 {{define "title"}}New Todo{{end}}
 {{define "main"}}
-    <form>
-  <label for="title">Заголовок</label>
-  <input type="text" id="title" placeholder="Новая заметка">
-</form>
+    <h1>Создание новой заметки</h1>
+    <div>
+    <form action="/newtodo" method="POST">
+        <label>Заголовок</label>
+        <input type="text" name="title" placeholder="Новая заметка"> 
+        <label>Содержание</label>
+        <input type="text" name="content" placeholder="Содержимое заметки...">
+        <label>Срок</label>
+        <input type="text" name="expires" placeholder="1 день">
+        <input type="submit" value="Send">
+    </form>
+    </div>
 {{end}}
