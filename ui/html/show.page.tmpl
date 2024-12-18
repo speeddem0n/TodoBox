@@ -1,17 +1,17 @@
 {{template "base" .}}
 
-{{define "title"}}Todo №{{.ID}}{{end}}
+{{define "title"}}Todo №{{.Todo.ID}}{{end}}
 
 {{define "main"}}
 <div class='snippet'>
     <div class='metadata'>
-        <strong>{{.Title}}</strong>
-        <span>№{{.ID}}</span>
+        <strong>{{.Todo.Title}}</strong>
+        <span>№{{.Todo.ID}}</span>
     </div>
-    <pre><code>{{.Content}}</code></pre>
+    <pre><code>{{.Todo.Content}}</code></pre>
     <div class='metadata'>
-        <time>Создан: {{.Created}}</time>
-        <time>Срок: {{.Expires}}</time>
+        <time>Создан: {{.Todo.Created}}</time>
+        <time>Срок: {{.Todo.Expires}}</time>
     </div>
 </div>
 {{end}}

@@ -65,6 +65,8 @@ func (app *application) showSnippet(wr http.ResponseWriter, resp *http.Request) 
 		return
 	}
 
+	data := &templateData{Todo: todo} // Создаем экземпляр структуры templateData, содержащей данные заметки.
+
 	files := []string{
 		".\\ui\\html\\show.page.tmpl",
 		".\\ui\\html\\base.layout.tmpl",
@@ -77,7 +79,7 @@ func (app *application) showSnippet(wr http.ResponseWriter, resp *http.Request) 
 		return
 	}
 
-	err = ts.Execute(wr, todo) // Выполнение файлов шаблонов
+	err = ts.Execute(wr, data) // Выполнение файлов шаблонов
 	if err != nil {
 		app.serverError(wr, err) // Использование helper serverError
 	}
