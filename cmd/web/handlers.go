@@ -72,3 +72,18 @@ func (app *application) newTodo(wr http.ResponseWriter, resp *http.Request) {
 		app.render(wr, "create.page.tmpl", nil)
 	}
 }
+
+func (app *application) deleteTodo(wr http.ResponseWriter, resp *http.Request) { // Handler для удаления заметок
+	id, err := strconv.Atoi(resp.URL.Query().Get("id"))
+	if err != nil {
+		app.notFound(wr)
+		return
+	}
+	err = app.todos.Delete(id)
+	if err != nil {
+		app.serverError(wr, err)
+		return
+	}
+	http.Redirect(wr, resp, "/", http.StatusSeeOther)
+
+}

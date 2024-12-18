@@ -37,6 +37,7 @@ func (app *application) routes() *http.ServeMux {
 	mux.HandleFunc("/", app.home)
 	mux.HandleFunc("/todo", app.showTodo)
 	mux.HandleFunc("/create", app.newTodo)
+	mux.HandleFunc("/delete", app.deleteTodo)
 
 	fileServer := http.FileServer(neuteredFileSystem{http.Dir(".\\ui\\static")})
 
