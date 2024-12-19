@@ -89,3 +89,19 @@ func (app *application) deleteTodo(wr http.ResponseWriter, resp *http.Request) {
 	http.Redirect(wr, resp, "/", http.StatusSeeOther) // Перенаправляем юзера обратно на главную страницу
 
 }
+
+func (app *application) searchTodo(wr http.ResponseWriter, resp *http.Request) { // Handler для поиска заметок по ID /search
+	err := resp.ParseForm() // Парсим значения из URL
+	if err != nil {
+		app.serverError(wr, err) // Используем помошник serverError для обработки ошибки
+		return
+	}
+	searchID := resp.FormValue("searchID") // Получаем ID от пользователя
+	id, err := strconv.Atoi(searchID)      // Конвертируем ID в INT
+	if err != nil {
+		app.notFound(wr) // Ошибка 404 если такого ID не существует
+		return
+	}
+
+	http.Redirect(wr, resp, fmt.Sprintf("/todo?id=%d", id), http.StatusSeeOther) // Перенаправляем пользователя на страницу с заметкой если все прошло успешно
+}

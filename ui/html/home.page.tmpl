@@ -4,6 +4,13 @@
  
 {{define "main"}}
     <h2>Последние заметки</h2>
+    <h3><search>
+        <form method="get" action="/search">
+            <label>Поиск</label>
+            <input type="search" name="searchID" placeholder="Введите ID заметки">
+            <button>Найти</button>
+        </form>
+    </search></h3>
     {{if .Todos}}
     <table>
         <tr>

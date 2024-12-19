@@ -38,6 +38,7 @@ func (app *application) routes() *http.ServeMux { // Мультиплексор 
 	mux.HandleFunc("/todo", app.showTodo)     // Отображения заметки по id Пример "/todo?id=1"
 	mux.HandleFunc("/create", app.newTodo)    // Созадние заметки
 	mux.HandleFunc("/delete", app.deleteTodo) // Удаление заметки
+	mux.HandleFunc("/search", app.searchTodo) // Поиск заметки
 
 	fileServer := http.FileServer(neuteredFileSystem{http.Dir(".\\ui\\static")}) // FileServer возвращает обработчик который обслуживает HTTP-запросы с содержимым файловой системы.
 
