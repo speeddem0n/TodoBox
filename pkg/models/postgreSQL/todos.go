@@ -7,7 +7,7 @@ import (
 	"github.com/speeddem0n/todobox/pkg/models"
 )
 
-type TodoModel struct {
+type TodoModel struct { // Модель дял работы с БД
 	DB *sql.DB
 }
 
@@ -16,8 +16,8 @@ func (m *TodoModel) Insert(title, content, expires string) (int, error) { // М�
 	VALUES($1,$2, date_trunc('second', current_timestamp), 
 	date_trunc('second', current_timestamp) + INTERVAL '1 day' * $3) RETURNING id` // SQL запрос для добавления новой заметки, возвращает Id последнего запроса
 
-	var id int // Переменная для последующей записи id
-	err := m.DB.QueryRow(stmt, title, content, expires).Scan(&id)
+	var id int                                                    // Переменная для последующей записи id
+	err := m.DB.QueryRow(stmt, title, content, expires).Scan(&id) // Делаем запрос в бд, и в ответ получем ID добавленного ряда
 	if err != nil {
 		return 0, err
 	}
@@ -77,10 +77,10 @@ func (m *TodoModel) Latest() ([]*models.Todo, error) { // Метод возвр�
 	return todos, nil // Возвращаем срез с данными
 }
 
-func (m *TodoModel) Delete(id int) error {
-	stmt := `DELETE FROM todo where id = $1`
+func (m *TodoModel) Delete(id int) error { // Метод для удаления записи из БД по ее ID
+	stmt := `DELETE FROM todo where id = $1` // SQL запрос для удаления
 
-	_, err := m.DB.Exec(stmt, id)
+	_, err := m.DB.Exec(stmt, id) // Выполнаяем запрос
 	if err != nil {
 		return err
 	}
