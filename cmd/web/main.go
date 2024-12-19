@@ -37,12 +37,7 @@ func main() {
 
 	conf := config{} // Создаем пустую структуру для записи настроек из файла
 
-	file, err := os.ReadFile("config.yaml") // Считываем файл с настройками
-	if err != nil {
-		errorLog.Fatal(err) // Приложение прекращает работу в случае ошибки
-	}
-
-	err = yaml.Unmarshal(file, &conf) // Декадируем YAML файл в структуру config
+	err := getSettings(&conf, "config.yaml") // Доастаем настройки из файла в структуру conf
 	if err != nil {
 		errorLog.Fatal(err) // Приложение прекращает работу в случае ошибки
 	}
@@ -89,4 +84,18 @@ func openDB(conf *config) (*sql.DB, error) { // Функия для открыт
 	}
 
 	return db, nil
+}
+
+func getSettings(conf *config, file string) error { // Функция для получения настроек из файла config
+	fileContent, err := os.ReadFile(file) // Считываем файл с настройками
+	if err != nil {
+		return err // Приложение прекращает работу в случае ошибки
+	}
+
+	err = yaml.Unmarshal(fileContent, &conf) // Декадируем YAML файл в структуру config
+	if err != nil {
+		return err // Приложение прекращает работу в случае ошибки
+	}
+
+	return nil
 }
