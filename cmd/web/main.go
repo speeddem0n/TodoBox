@@ -61,6 +61,13 @@ func main() {
 		templateCache: templateCache,
 	}
 
+	rowsAffected, err := app.todos.AutoUpdate() // При запуске приложения истекшие заметки автоматически удаляются
+	if err != nil {
+		errorLog.Fatal(err) // Приложение прекращает работу в случае ошибки
+	}
+
+	infoLog.Printf("Обновнелие БД. Истекших заметок удалено: %v", rowsAffected) // Выводит информацию о колл-ве удаленных заметок из БД после обновления
+
 	srv := &http.Server{ // Структура для подключения к серверу
 		Addr:     *&conf.Addr,  // Server addres
 		ErrorLog: errorLog,     // Custom logger
