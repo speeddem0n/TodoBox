@@ -41,6 +41,7 @@ func main() {
 	if err != nil {
 		errorLog.Fatal(err) // Приложение прекращает работу в случае ошибки
 	}
+
 	err = yaml.Unmarshal(file, &conf) // Декадируем YAML файл в структуру config
 	if err != nil {
 		errorLog.Fatal(err) // Приложение прекращает работу в случае ошибки
@@ -50,6 +51,7 @@ func main() {
 	if err != nil {
 		errorLog.Fatal(err) // Приложение прекращает работу в случае ошибки
 	}
+
 	defer db.Close() // Откладываем закрытие подключения к БД по завершению работы приложения
 
 	templateCache, err := newTemplateCache(".\\ui\\html\\") // Инициализируем новый кэш шаблона
