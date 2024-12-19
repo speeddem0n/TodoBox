@@ -16,12 +16,14 @@
         <tr>
             <th>Заголовок</th>
             <th>Создан</th>
+            <th>Истекает</th>
             <th>ID</th>
         </tr>
         {{range .Todos}}
         <tr>
             <td><a href='/todo?id={{.ID}}'>{{.Title}}</a></td>
-            <td>{{.Created}}</td>
+            <td>{{.FormatCreated}}</td>
+            <td>{{.FormatExpires}}</td>
             <td>№{{.ID}}</td>
             <td><a href="/delete?id={{.ID}}">Удалить</a></td>
         </tr>

@@ -2,6 +2,7 @@ package models
 
 import (
 	"errors"
+	"fmt"
 	"time"
 )
 
@@ -13,4 +14,14 @@ type Todo struct { // Типы данных верхнего уровня
 	Content string    // Содержимое заметки
 	Created time.Time // Дата создания
 	Expires time.Time // Дата удаления
+}
+
+func (t *Todo) FormatCreated() string { //Форматирование даты Created в формат ММ ДД ГГГ
+	year, month, day := t.Created.Date()
+	return fmt.Sprintf("%v %d, %d", month, day, year)
+}
+
+func (t *Todo) FormatExpires() string { //Форматирование даты Expires в формат ММ ДД ГГГ
+	year, month, day := t.Expires.Date()
+	return fmt.Sprintf("%v %d, %d", month, day, year)
 }

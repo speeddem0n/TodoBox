@@ -1,0 +1,10 @@
+# Server addres
+addr: :4000
+# pSQL DB username
+usernameDB: web
+# pSQL DB password
+passwordDB: !!str 1235
+# pSQL DB name
+DBname: todobox
+# pSQL DB sslmode
+sslmode: disable
