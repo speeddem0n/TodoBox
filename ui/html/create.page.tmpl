@@ -1,0 +1,17 @@
+{{template "base" .}}
+ 
+{{define "title"}}New Todo{{end}}
+{{define "main"}}
+    <h1>Создание новой заметки</h1>
+    <div>
+    <form action="/create" method="POST">
+        <label>Заголовок</label>
+        <input type="text" name="title" maxlength="50" required placeholder="Новая заметка"><br>
+        <label>Содержание</label>
+        <input type="text" name="content" required placeholder="Содержимое заметки..."><br>
+        <label>Срок</label>
+        <input type="text" name="expires" required placeholder="1 день"><br>
+        <input type="submit" value="Send">
+    </form>
+    </div>
+{{end}}
