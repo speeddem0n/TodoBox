@@ -86,3 +86,13 @@ func (m *TodoModel) Delete(id int) error { // Метод для удаления
 	}
 	return nil
 }
+
+func (m *TodoModel) AutoUpdate() (int, error) { // Метод для автоматического обновления базы данных
+	stmt := `DELETE FROM todo where expires < CURRENT_TIMESTAMP` // SQL запрос для удаления
+	res, err := m.DB.Exec(stmt)                                  // Выполнаяем запрос
+	if err != nil {
+		return 0, err
+	}
+	count, err := res.RowsAffected() // Получаем колл-во удаленных рядов
+	return int(count), nil
+}
